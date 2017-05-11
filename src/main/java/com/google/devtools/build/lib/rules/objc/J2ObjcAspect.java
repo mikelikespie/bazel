@@ -315,14 +315,14 @@ public class J2ObjcAspect extends NativeAspectClass implements ConfiguredAspectF
               ruleContext,
               ImmutableList.<Artifact>of(),
               ImmutableList.<Artifact>of(),
-              ImmutableList.<PathFragment>of(),
+              j2ObjcSource.getHeaderSearchPaths(),
               depAttributes);
       xcodeProvider =
           xcodeProvider(
               ruleContext,
               common,
               ImmutableList.<Artifact>of(),
-              ImmutableList.<PathFragment>of(),
+              j2ObjcSource.getHeaderSearchPaths(),
               depAttributes);
     }
 
