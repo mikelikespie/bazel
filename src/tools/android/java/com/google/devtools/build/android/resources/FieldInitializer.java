@@ -15,7 +15,7 @@ package com.google.devtools.build.android.resources;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Set;
+import java.util.Collection;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.commons.InstructionAdapter;
 
@@ -23,7 +23,7 @@ import org.objectweb.asm.commons.InstructionAdapter;
  * Represents a field and its initializer (where initialization is either part of the field
  * definition, or done via code in the static clinit function).
  */
-public interface FieldInitializer {
+public interface FieldInitializer extends Comparable<FieldInitializer> {
   /**
    * Write the bytecode for the field definition.
    *
@@ -38,13 +38,12 @@ public interface FieldInitializer {
    */
   int writeCLInit(InstructionAdapter insts, String className);
 
-  /**
-   * Write the source code for the initializer to the given writer.
-   * Unlike {@link #writeFieldDefinition}, this assumes non-final fields, since we don't use this
-   * for final fields yet.
-   */
-  void writeInitSource(Writer writer) throws IOException;
+  /** Write the source code for the initializer to the given writer. */
+  void writeInitSource(Writer writer, boolean finalFields) throws IOException;
 
-  /** Tests if the field's name is in the provided set. */
-  boolean nameIsIn(Set<String> fieldNames);
+  /** Tests if the field's name is in the provided collection. */
+  boolean nameIsIn(Collection<String> fieldNames);
+
+  /** Adds fieldName to the provided set. */
+  void addTo(Collection<String> fieldNames);
 }

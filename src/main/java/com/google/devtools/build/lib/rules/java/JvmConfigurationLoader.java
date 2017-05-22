@@ -129,7 +129,7 @@ public final class JvmConfigurationLoader implements ConfigurationFragmentFactor
     if (attributes.isAttributeValueExplicitlySpecified("java_home")) {
       javaHomePath = javaHomePath.getRelative(attributes.get("java_home", Type.STRING));
       List<Label> srcs = attributes.get("srcs", BuildType.LABEL_LIST);
-      if (!(javaHomePath.isAbsolute() ^ !srcs.isEmpty())) {
+      if (javaHomePath.isAbsolute() && !srcs.isEmpty()) {
         throw new InvalidConfigurationException(
             String.format(
                 "'java_home' with an absolute path requires 'srcs' to be empty. "
