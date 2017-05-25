@@ -61,7 +61,7 @@ public class J2ObjcConfiguration extends Fragment {
    * documentation.
    */
   static final ImmutableList<String> J2OBJC_BLACKLISTED_TRANSLATION_FLAGS =
-      ImmutableList.of("--prefixes", "--prefix", "-x");
+      ImmutableList.of("-x");
 
   static final String INVALID_TRANSLATION_FLAGS_MSG_TEMPLATE =
       "J2Objc translation flags: %s not supported. Unsupported flags are: %s";
