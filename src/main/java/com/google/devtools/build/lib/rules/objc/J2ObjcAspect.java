@@ -625,13 +625,17 @@ public class J2ObjcAspect extends NativeAspectClass implements ConfiguredAspectF
             .addAll(outputClassMappingFiles)
             .build();
 
+    String genfilesPath =
+        getProtoOutputRoot(ruleContext)
+            .getPathString();
+
     SupportData supportData = base.getProvider(ProtoSupportDataProvider.class).getSupportData();
 
     ImmutableList.Builder<ProtoCompileActionBuilder.ToolchainInvocation> invocations = ImmutableList.builder();
     invocations.add(
         new ProtoCompileActionBuilder.ToolchainInvocation(
             "j2objc", checkNotNull(protoToolchain),
-            ruleContext.getConfiguration().getGenfilesFragment().getPathString()));
+            genfilesPath);
     ProtoCompileActionBuilder.registerActions(
         ruleContext,
         invocations.build(),
@@ -744,10 +748,8 @@ public class J2ObjcAspect extends NativeAspectClass implements ConfiguredAspectF
   private static J2ObjcSource protoJ2ObjcSource(
       RuleContext ruleContext, ImmutableList<Artifact> protoSources) {
     PathFragment objcFileRootExecPath =
-        ruleContext
-            .getConfiguration()
-            .getGenfilesDirectory(ruleContext.getRule().getRepository())
-            .getExecPath();
+        getProtoOutputRoot(ruleContext);
+
     Iterable<PathFragment> headerSearchPaths =
         J2ObjcLibrary.j2objcSourceHeaderSearchPaths(
             ruleContext, objcFileRootExecPath, protoSources);
@@ -759,6 +761,18 @@ public class J2ObjcAspect extends NativeAspectClass implements ConfiguredAspectF
         objcFileRootExecPath,
         SourceType.PROTO,
         headerSearchPaths);
+  }
+
+  private static PathFragment getProtoOutputRoot(RuleContext ruleContext) {
+    return ruleContext
+        .getConfiguration()
+        .getGenfilesFragment()
+        .getRelative(
+            ruleContext
+                .getLabel()
+                .getPackageIdentifier()
+                .getRepository()
+                .getPathUnderExecRoot());
   }
 
   private static boolean isProtoRule(ConfiguredTarget base) {
