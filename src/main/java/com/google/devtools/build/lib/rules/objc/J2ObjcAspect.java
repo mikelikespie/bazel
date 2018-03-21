@@ -635,7 +635,7 @@ public class J2ObjcAspect extends NativeAspectClass implements ConfiguredAspectF
     invocations.add(
         new ProtoCompileActionBuilder.ToolchainInvocation(
             "j2objc", checkNotNull(protoToolchain),
-            genfilesPath);
+            genfilesPath));
     ProtoCompileActionBuilder.registerActions(
         ruleContext,
         invocations.build(),
